@@ -111,10 +111,25 @@ esg_scaled %>%
   facet_wrap(~ indicator, scales = 'free')
 
 
-esg_scaled %>% 
-  pivot_wider(id_cols = c(country_code, year), names_from = indicator)
+indicator_interest <- c('agricultural_land_percent_of_land_area',
+                        'agriculture_forestry_and_fishing_value_added_percent_of_gdp',
+                        'food_production_index_2004_2006_100',
+                        'forest_area_percent_of_land_area')
 
-country
+esg_scaled %>% 
+  filter(country_code == countries_investigate,
+         indicator == indicator_interest) %>% 
+  na.omit() %>% 
+  ggplot(aes(year, value)) +
+  geom_line(aes(group = country_code, color = country_code)) +
+  # theme(legend.position = 'none') +
+  facet_wrap(~ indicator)
+
+country_slim <- country %>% select(country_code, region, income_group, system_of_trade, latest_population_census, latest_household_survey, vital_registration_complete, latest_agricultural_census, latest_industrial_data, latest_trade_data)
+
+esg_scaled %>% 
+  group_split(indicator) 
+
 
 
 ```
